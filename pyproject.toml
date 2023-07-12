@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "nem-bidding-analysis"
+version = "0.1.0"
+description = "Tools to analyse NEM (re)bid data and bidding analysis"
+authors = ["prakaa <abiprakash007@gmail.com>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+packages = [{include = "nem_bidding_analysis"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+numpy = "^1.25.1"
+pandas = "^2.0.3"
+matplotlib = "^3.7.2"
+tqdm = "^4.65.0"
+polars = {extras = ["complete"], version = "^0.18.7"}
+nemosis = "^3.4.0"
+
+[tool.poetry.group.dev.dependencies]
+ipdb = "^0.13.13"
+black = "^23.7.0"
+isort = "^5.12.0"
+ipykernel = "^6.24.0"
+mypy = "^1.4.1"
+flake8 = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
