@@ -15,6 +15,7 @@ matplotlib = "^3.7.2"
 tqdm = "^4.65.0"
 polars = {extras = ["complete"], version = "^0.18.7"}
 nemosis = "^3.4.0"
+mms-monthly-cli = "^0.1.0"
 
 [tool.poetry.group.dev.dependencies]
 ipdb = "^0.13.13"
