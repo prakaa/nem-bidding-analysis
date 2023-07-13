@@ -21,6 +21,7 @@ import argparse
 import logging
 from glob import glob
 from pathlib import Path
+from typing import List
 
 import numpy as np
 import pandas as pd
@@ -58,12 +59,13 @@ bidperoffer_dtypes = {
 }
 
 dt_format = "%Y/%m/%d %H:%M:%S"
-strf_format = "%Y%m%d"
+strf_format = "%Y%m%d%H%M%S"
 
 
 def arg_parser():
     description = (
-        "Chunk large monthly AEMO data table CSVs into parquet partitions. "
+        "Chunk large monthly AEMO data table CSVs into parquet partitions "
+        + "using a data column. "
         + "Assumes that the table header is in the 2nd row"
     )
     parser = argparse.ArgumentParser(description=description)
@@ -80,11 +82,17 @@ def arg_parser():
         ),
     )
     parser.add_argument(
+        "-partition_col",
+        type=str,
+        help=("Column to partition parquet files on"),
+    )
+    parser.add_argument(
         "-chunksize",
         type=int,
         default=10**6,
         help=("Size of each DataFrame chunk (# of lines). Default 10^6"),
     )
+
     args = parser.parse_args()
     return args
 
@@ -103,14 +111,23 @@ def estimate_size_of_lines(file_path: Path, columns=pd.Index) -> float:
     return size_per_line
 
 
+def get_date_cols(columns: pd.Index) -> List[str]:
+    return [col for col in columns if "DATE" in col]
+
+
 def write_chunks_by_trading_date(
-    chunk: pd.DataFrame, output_dir: Path
+    chunk: pd.DataFrame, output_dir: Path, partition_col: str
 ) -> None:
-    unique_trading_dates = chunk["TRADINGDATE"].unique().tolist()
-    for trading_date in unique_trading_dates:
-        td_chunk = chunk.loc[chunk["TRADINGDATE"] == trading_date, :]
-        str_td = trading_date.strftime(strf_format)
-        base_file_name = Path(output_dir, str_td + "-chunk-")
+    unique_values = chunk[partition_col].unique().tolist()
+    for value in unique_values:
+        value_chunk = chunk.loc[chunk[partition_col] == value, :]
+        if type(value) == pd.Timestamp:
+            str_value = value.strftime(strf_format)
+        else:
+            str_value = str(value)
+        str_value = str_value.replace("/", "")
+        str_value = str_value.replace("\\", "")
+        base_file_name = Path(output_dir, str_value + "-chunk-")
         if not (
             sorted_written_chunks := sorted(
                 glob(str(base_file_name) + "*.parquet")
@@ -123,15 +140,21 @@ def write_chunks_by_trading_date(
         filename = Path(
             str(base_file_name) + str(chunk_number).rjust(3, "0") + ".parquet"
         )
-        td_chunk.to_parquet(filename, engine="pyarrow")
+        value_chunk.to_parquet(filename, engine="pyarrow")
     return None
 
 
-def chunk_file(file_path: Path, output_dir: Path, chunksize: int) -> None:
+def chunk_file(
+    file_path: Path, output_dir: Path, partition_col: str, chunksize: int
+) -> None:
     if not file_path.suffix.lower() == ".csv":
         logging.error("File is not a CSV")
         exit()
     cols = get_columns(file_path)
+    if partition_col not in cols:
+        logging.error(f"Partition col {partition_col} not in data")
+        exit()
+    date_cols = get_date_cols(cols)
     size_per_line = estimate_size_of_lines(file_path, cols)
     file_size = file_path.stat().st_size
     if "BIDPEROFFER" in file_path.stem:
@@ -146,7 +169,7 @@ def chunk_file(file_path: Path, output_dir: Path, chunksize: int) -> None:
         skiprows=2,
         names=cols,
         dtype=dtypes,
-        parse_dates=["TRADINGDATE", "OFFERDATETIME"],
+        parse_dates=date_cols,
         date_format=dt_format,
     ) as reader:
         with tqdm(
@@ -154,13 +177,17 @@ def chunk_file(file_path: Path, output_dir: Path, chunksize: int) -> None:
         ) as pbar:
             for chunk in reader:
                 if previous_chunk is not None:
-                    write_chunks_by_trading_date(previous_chunk, output_dir)
+                    write_chunks_by_trading_date(
+                        previous_chunk, output_dir, partition_col
+                    )
                 previous_chunk = chunk
                 # See here for comparison of pandas DataFrame size vs CSV size:
                 # https://stackoverflow.com/questions/18089667/how-to-estimate-how-much-memory-a-pandas-dataframe-will-need#32970117
                 pbar.update((size_per_line * chunksize) / 2)
             write_chunks_by_trading_date(
-                previous_chunk.iloc[:-1], output_dir  # type: ignore
+                previous_chunk.iloc[:-1],  # type: ignore
+                output_dir,
+                partition_col=partition_col,
             )
 
 
@@ -179,7 +206,7 @@ def main():
     if not f.is_file():
         logging.error("Path provided does not point to a file")
         exit()
-    chunk_file(f, output_dir, args.chunksize)
+    chunk_file(f, output_dir, args.partition_col, args.chunksize)
 
 
 if __name__ == "__main__":
