@@ -976,13 +976,13 @@ files = [
 
 [[package]]
 name = "mms-monthly-cli"
-version = "0.1.0"
+version = "0.2.0"
 description = "A package and CLI utility to check for available data and download tables from AEMO's Monthly Data Archive"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "mms_monthly_cli-0.1.0-py3-none-any.whl", hash = "sha256:9b3ba6bc90f843fe8da58b24c89920529f5bf607be7468e9654bacd24d62ad37"},
-    {file = "mms_monthly_cli-0.1.0.tar.gz", hash = "sha256:b0a260aeec52f31f83fce11e49c23e621dddd7a57cc91f406f12868af90fac22"},
+    {file = "mms_monthly_cli-0.2.0-py3-none-any.whl", hash = "sha256:7cde17ed7d1307caeecfeaca908dacbc852999400575b0be8fe2a64e5a7ddbe5"},
+    {file = "mms_monthly_cli-0.2.0.tar.gz", hash = "sha256:1d11214760e33227bc95e6ff91b615da261dbac848256f1652df49034351701b"},
 ]
 
 [package.dependencies]
@@ -1933,13 +1933,13 @@ test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "zipp"
-version = "3.16.0"
+version = "3.16.1"
 description = "Backport of pathlib-compatible object wrapper for zip files"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "zipp-3.16.0-py3-none-any.whl", hash = "sha256:5dadc3ad0a1f825fe42ce1bce0f2fc5a13af2e6b2d386af5b0ff295bc0a287d3"},
-    {file = "zipp-3.16.0.tar.gz", hash = "sha256:1876cb065531855bbe83b6c489dcf69ecc28f1068d8e95959fe8bbc77774c941"},
+    {file = "zipp-3.16.1-py3-none-any.whl", hash = "sha256:0b37c326d826d5ca35f2b9685cd750292740774ef16190008b00a0227c256fe0"},
+    {file = "zipp-3.16.1.tar.gz", hash = "sha256:857b158da2cbf427b376da1c24fd11faecbac5a4ac7523c3607f8a01f94c2ec0"},
 ]
 
 [package.extras]
@@ -1949,4 +1949,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "b5b503446c64bf6f86a117c4c66a6d78c891588350df66d8f10c1886ad1d6e14"
+content-hash = "4c5e31fae41cabc44077c83a91cec452e134fab22e502de2a8e6b9128c53029f"
