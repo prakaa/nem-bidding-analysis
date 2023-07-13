@@ -11,4 +11,5 @@ for csv in raw_csvs:
         partition_col = "TRADINGDATE"
     elif "SETTLEMENTDATE" in cols:
         partition_col = "SETTLEMENTDATE"
+    output_dir /= Path(partition_col)
     chunk_file(csv, output_dir, partition_col, chunksize=10**6)
