@@ -21,6 +21,10 @@ get_raw_data:
 partition_raw_data:
 		poetry run python data_scripts/get_partitioned_data.py
 
+## Run bid zip file size analysis
+bid_zip_file_analysis:
+		poetry run python analysis_scripts/bid_zip_size.py
+
 #################################################################################
 # PROJECT RULES                                                                 #
 #################################################################################
