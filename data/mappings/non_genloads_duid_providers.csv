@@ -1,0 +1,43 @@
+DUID,Region,Participant,Station Name,Tech
+DRACAN1,NSW1,Acacia Energy Pty Ltd,DRACAN1,DR/VPP
+DRAESN1,NSW1,AGL Energy Services Pty Limited,DR AES N VL1,DR/VPP
+LD03,NSW1,AGL Macquarie Pty Limited,Liddell Power Station,Steam Sub-Critical
+TORRA3,SA1,AGL SA Generation Pty Limited,Torrens Island Power Station,Steam Sub-Critical
+VSSAE1V1,SA1,AGL South Australia Pty Ltd,VPP AGLE SA 1,DR/VPP
+APD01,VIC1,Alcoa Portland Aluminium Pty Ltd,Portland,Portland Smelter
+ASNAES1,NSW1,Amalgamated Energy Services Pty Ltd,AS AES NSW,DR/VPP
+ASNBRL1,NSW1,Boral Cement Limited,Boral Aggregated Load NSW1,DR/VPP
+ASSDE1,SA1,Discover Energy Pty Ltd,DiscoverEnergy VPPSA,DR/VPP
+ASNENC1,NSW1,Enel X Australia Pty Ltd,ENOC MASP NSW,DR/VPP
+ASQENC1,QLD1,Enel X Australia Pty Ltd,ENOC MASP QLD,DR/VPP
+ASSENC1,SA1,Enel X Australia Pty Ltd,ENOC MASP SA,DR/VPP
+VENUS1,VIC1,Enel X Australia Pty Ltd,ENOC MASP VIC,DR/VPP
+ASSEL1,SA1,Energy Locals Pty Ltd,Energy Locals SA VPP,DR/VPP
+ASNSEL2,NSW1,Energy Locals Pty Ltd,ASNSEL2,DR/VPP
+ASVEIL2,VIC1,Energy Locals Pty Ltd,ASVEIL2,DR/VPP
+VSSEL1V1,SA1,Energy Locals Pty Ltd,VPP Energy Locals SA 1,DR/VPP
+VSNEL2S1,NSW1,Energy Locals Pty Ltd,VPP Energy Locals NSW 2,DR/VPP
+VSVEL2S1,VIC1,Energy Locals Pty Ltd,VPP Energy Locals VIC 2,DR/VPP
+ASQEEV1,QLD1,Ergon Energy Queensland Pty Ltd ,Bohle BESS,Battery
+DRFIIN01,TAS1,Firmus Infrastructure Pty Ltd,DR FIRM INFRA T 1,DR/VPP
+ASTHYD1,TAS1,Hydro-Electric Corporation,HydroTas MASP TAS,MASP Pump
+VSQHT1V1,QLD1,Hydro-Electric Corporation,VPP HT QLD 1,DR/VPP
+KIAMSF,VIC1,KSF Project Nominees Pty Ltd as The Trustee for KSF Project Trust,Kiamal Solar Farm ,PV
+ASPAPM01,SA1,PA Power Microgrid Pty Ltd,IKEA Brooklyn Park,DR/VPP
+ASSERDV1,VIC1,Shell Energy Retail Pty Ltd,Shell Energy Retail DR VIC 1,DR/VPP
+DRSHVS01,SA1,Shine Hub Pty Ltd,DRSHVS01,DR/VPP
+DRSHVN01,NSW1,Shine Hub Pty Ltd,DRSHVN01,DR/VPP
+VSSSH1S1,SA1,Shine Hub Pty Ltd,VPP ShinHub SA 1,DR/VPP
+VSSSE1V1,SA1,Simply Energy,VPP Simply SA 1,DR/VPP
+SNOWYGJP,VIC1,Snowy Hydro Limited,Jindabyne Pump At Guthega,MASP Pump
+VSNSN1V1,NSW1,sonnen Australia Pty Limited,VPP sonnen NSW 1,DR/VPP
+ASSSN1,SA1,sonnen Australia Pty Limited,AS Sonnen SA,DR/VPP
+MACKAYGT,QLD1,Stanwell Corporation Limited,Mackay Gas Turbine,OCGT
+DRVIOT01,SA1,VIOTAS Australia Pty Ltd,DRVIOT01,DR/VPP
+DRVIOT02,VIC1,VIOTAS Australia Pty Ltd,DRVIOT02,DR/VPP
+DRVIOT03,NSW1,VIOTAS Australia Pty Ltd,DRVIOT03,DR/VPP
+DRVIOT04,QLD1,VIOTAS Australia Pty Ltd,DRVIOT04,DR/VPP
+DRVIOT05,TAS1,VIOTAS Australia Pty Ltd,DRVIOT05,DR/VPP
+ASRMGE03,SA1,Y.E.S. Energy (SA) Pty Ltd,ASRMGE03,DR/VPP
+ASRMGE03,SA1,Y.E.S. Energy (SA) Pty Ltd,ASRMGE02,DR/VPP
+ASRMGE03,SA1,Y.E.S. Energy (SA) Pty Ltd,ASRMGE01,DR/VPP

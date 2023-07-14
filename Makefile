@@ -17,6 +17,10 @@ PYTHON_INTERPRETER = python3
 get_raw_data:
 		poetry run python data_scripts/get_raw_data.py
 
+## Get generators & loads, and FCAS providers tables
+get_duid_info:
+		poetry run python data_scripts/get_duid_to_tech.py -raw_path data/raw/ -proc_path data/mappings/
+
 ## Partition raw_data
 partition_raw_data:
 		poetry run python data_scripts/get_partitioned_data.py
