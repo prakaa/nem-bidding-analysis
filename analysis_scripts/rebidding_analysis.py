@@ -1,16 +1,15 @@
-# %%
 import logging
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import List
 
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import pandas as pd
 import polars as pl
 from tqdm import tqdm
 
 
-def get_gen_tech_color_mapping(path_to_mappings: Path) -> pd.DataFrame:
+def get_gen_tech_mapping(path_to_mappings: Path) -> pd.DataFrame:
     gen_loads = pd.read_csv(path_to_mappings / Path("cleaned_gen_loads.csv"))
     non_gen_loads = pd.read_csv(
         path_to_mappings / Path("non_genloads_duid_providers_with_techs.csv")
@@ -18,16 +17,11 @@ def get_gen_tech_color_mapping(path_to_mappings: Path) -> pd.DataFrame:
     simple_techs = pd.read_json(
         path_to_mappings / Path("techtype_simple_mapping.json"), typ="series"
     )
-    tech_colors = pd.read_json(
-        path_to_mappings / Path("color_techtype_mapping.json"), typ="series"
-    )
-    tech_colors.name = "Tech"
     combined = pd.concat([gen_loads, non_gen_loads], axis=0)
     combined = combined.replace(simple_techs)
     combined.rename(
         columns={"Technology Type - Descriptor": "Tech"}, inplace=True
     )
-    combined["Colour"] = combined["Tech"].replace(tech_colors)
     keep_cols = [
         "Participant",
         "Region",
@@ -97,7 +91,7 @@ def count_rebids_by_tech(
     For a set of bids at a particular offer time, we drop duplicates for a DUID
     to avoid treating energy and FCAS bids submitted at the same time as different bids
     """
-    mapping = get_gen_tech_color_mapping(path_to_mappings)
+    mapping = get_gen_tech_mapping(path_to_mappings)
     filtered = get_all_rebids_less_than_ahead_time(df, ahead_time)
     merged = pd.merge(
         filtered,
@@ -186,17 +180,93 @@ def rebid_counts_across_july(
         )
 
 
+def plot_rebid_counts_across_july(output_path: Path, path_to_mappings: Path):
+    (month, month_str) = (7, "July")
+    data: List[pd.DataFrame] = []
+    for file in output_path.glob(f"rebid_counts_{month}*.parquet"):
+        df_month = pd.read_parquet(file)
+        data.append(df_month)
+    df = pd.concat(data, axis=0)
+    df["Year"] = df.index.year
+    by_year = df.groupby("Year").sum()
+    percent_by_year = by_year.div(by_year.sum(axis=1), axis=0) * 100
+    year_totals = by_year.sum(axis=1)
+    tech_colors = pd.read_json(
+        path_to_mappings / Path("color_techtype_mapping.json"), typ="series"
+    )
+    fig, ax = plt.subplots(1, 1, figsize=(8, 6))
+    last_col = None
+    offset = pd.Series()
+    for col in percent_by_year:
+        value = percent_by_year[col]
+        if last_col is not None:
+            ax.bar(
+                percent_by_year.index,
+                value,
+                bottom=offset,
+                label=col,
+                color=tech_colors[col],
+            )
+            offset = offset + value
+        else:
+            ax.bar(
+                percent_by_year.index, value, label=col, color=tech_colors[col]
+            )
+            offset = value
+        for index, item in value.items():
+            if item > 3:
+                ax.text(
+                    index,
+                    (offset[index] - item / 2),
+                    f"{int(item)}%",
+                    c="white",
+                    ha="center",
+                    va="center",
+                    fontsize=9,
+                )
+        last_col = col
+    for index, item in year_totals.items():
+        ax.text(
+            index,
+            107,
+            f"{int(item)}",
+            horizontalalignment="center",
+            fontsize=12,
+        )
+    ax.legend(
+        bbox_to_anchor=(0.5, -0.25),
+        loc="lower center",
+        borderaxespad=0,
+        frameon=False,
+        ncol=4,
+    )
+    ax.set_ylabel(
+        f"Percentage of all rebids within 5 minutes in {month_str} (%)"
+    )
+    ax.set_title(
+        f"Share of all rebids within 5 minutes of every DI in {month_str}, 2013-2021",
+        pad=25,
+    )
+    fig.savefig(Path("plots", "rebids_july_share_by_tech_2013_2021.pdf"))
+
+
 def main():
     logging.basicConfig(level=logging.INFO)
+    plt.style.use(Path("plots", "matplotlibrc.mplstyle"))
     partitioned_path = Path("data", "partitioned")
     mappings_path = Path("data", "mappings")
     output_path = Path("data", "processed")
+    if not output_path.exists():
+        output_path.mkdir()
     rebid_counts_across_july(
         list(range(2013, 2023, 2)),
         timedelta(minutes=5),
         partitioned_path,
         mappings_path,
         output_path,
+    )
+    plot_rebid_counts_across_july(
+        Path("data", "processed"), Path("data", "mappings")
     )
 
 
