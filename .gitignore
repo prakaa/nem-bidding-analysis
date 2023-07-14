@@ -1,5 +1,6 @@
-# ignore all data
-data/
+# ignore all raw and partitioned data
+data/raw/**
+data/partitioned/**
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
