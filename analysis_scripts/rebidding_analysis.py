@@ -1,4 +1,5 @@
 # %%
+import logging
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import List
@@ -6,6 +7,7 @@ from typing import List
 # import matplotlib.pyplot as plt
 import pandas as pd
 import polars as pl
+from tqdm import tqdm
 
 
 def get_gen_tech_color_mapping(path_to_mappings: Path) -> pd.DataFrame:
@@ -150,47 +152,53 @@ def rebid_counts_across_day(
 def rebid_counts_across_july(
     years: List[int],
     ahead_time: timedelta,
+    partitioned_data_path: Path,
+    mappings_path: Path,
+    output_path: Path,
 ) -> None:
     month = 7
     ahead_seconds = int(ahead_time.total_seconds())
     for year in years:
+        logging.info(f"Processing {year}")
         month_data: List[pd.DataFrame] = []
-        for day in range(1, 31):
-            day_count = rebid_counts_across_day(
-                Path("data", "partitioned"),
-                Path("data", "mappings"),
-                year,
-                month,
-                day,
-                ahead_time,
-            )
+        for day in tqdm(range(1, 31), desc=f"Processing {year}"):
+            try:
+                day_count = rebid_counts_across_day(
+                    partitioned_data_path,
+                    mappings_path,
+                    year,
+                    month,
+                    day,
+                    ahead_time,
+                )
+            except FileNotFoundError:
+                logging.warning(
+                    f"No data for {day}/{month}/{year}. Continuing"
+                )
+                continue
             month_data.append(day_count)
         month_df = pd.concat(month_data, axis=0)
         month_df.to_parquet(
-            Path(
-                "data",
-                "processed",
+            output_path
+            / Path(
                 f"rebid_counts_{month}_{year}_{ahead_seconds}.parquet",
             )
         )
 
 
-#
-# # %%
-# plt.style.use("../matplotlibrc.mplstyle")
-# plt.pie(x, labels=x.index)
-# plt.legend(loc="lower center")
-#
-# # %%
-# y = rebid[rebid["REBIDAHEADTIME"] < pd.Timedelta(hours=1)]
-# y = y.groupby("Technology Type - Descriptor")["DUID"].count().rename("REBIDS")
-# plt.style.use("../matplotlibrc.mplstyle")
-# plt.pie(y, labels=y.index)
-# plt.legend(loc="lower center")
-#
-# # %%
-# z = rebid[rebid["REBIDAHEADTIME"] < pd.Timedelta(minutes=5)]
-# z = z.groupby("Technology Type - Descriptor")["DUID"].count().rename("REBIDS")
-# plt.style.use("../matplotlibrc.mplstyle")
-# plt.pie(z, labels=z.index)
-# plt.legend(loc="lower center")
+def main():
+    logging.basicConfig(level=logging.INFO)
+    partitioned_path = Path("data", "partitioned")
+    mappings_path = Path("data", "mappings")
+    output_path = Path("data", "processed")
+    rebid_counts_across_july(
+        [2013],
+        timedelta(minutes=5),
+        partitioned_path,
+        mappings_path,
+        output_path,
+    )
+
+
+if __name__ == "__main__":
+    main()
