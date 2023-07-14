@@ -11,5 +11,7 @@ for csv in raw_csvs:
         partition_col = "TRADINGDATE"
     elif "SETTLEMENTDATE" in cols:
         partition_col = "SETTLEMENTDATE"
-    output_dir /= Path(partition_col)
-    chunk_file(csv, output_dir, partition_col, chunksize=10**6)
+    partition_dir = output_dir / Path(partition_col)
+    if not partition_dir.exists():
+        partition_dir.mkdir()
+    chunk_file(csv, partition_dir, partition_col, chunksize=10**6)
