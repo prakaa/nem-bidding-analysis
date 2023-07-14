@@ -30,12 +30,15 @@ from tqdm import tqdm
 """Some columns that would otherwise be integer are cast to float to handle NaN
 """
 bidperoffer_dtypes = {
+    "VERSIONNO": np.float32,
     "I": str,
     "BIDS": str,
     "BIDOFFERPERIOD": str,
     "1": np.float32,
     "DUID": str,
     "BIDTYPE": str,
+    "ROCUP": np.float32,
+    "ROCDOWN": np.float32,
     "PERIODID": np.float32,
     "MAXAVAIL": np.float32,
     "FIXEDLOAD": np.float32,
