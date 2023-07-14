@@ -1,4 +1,4 @@
-DUID,Region,Participant,Station Name,Tech
+DUID,Region,Participant,Station Name,Technology Type - Descriptor
 DRACAN1,NSW1,Acacia Energy Pty Ltd,DRACAN1,DR/VPP
 DRAESN1,NSW1,AGL Energy Services Pty Limited,DR AES N VL1,DR/VPP
 LD03,NSW1,AGL Macquarie Pty Limited,Liddell Power Station,Steam Sub-Critical

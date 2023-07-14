@@ -1,1 +1,44 @@
-{"Battery": ["#1be19f"], "OCGT": ["#deae9e"], "CCGT": ["#fd5925"], "Reciprocating Engine": ["#8e183f"], "Hydro - Run of River": ["#8a96f7"], "Hydro - Gravity": ["#208eb7"], "Pump/Load": ["#639e6c"], "MASP Pump": ["#3b5e40"], "Steam Sub-Critical": ["#78583e"], "Steam Super Critical": ["#909090"], "Portland Smelter": ["#1c4585"], "DR/DR Aggregator": ["#9739d9"], "VPP": ["#d148d3"], "PV": ["#d98e01"], "Wind": ["#69b008"]}
+{
+    "Battery": [
+        "#1be19f"
+    ],
+    "OCGT": [
+        "#deae9e"
+    ],
+    "CCGT": [
+        "#fd5925"
+    ],
+    "Reciprocating Engine": [
+        "#8e183f"
+    ],
+    "Hydro - Run of River": [
+        "#8a96f7"
+    ],
+    "Hydro - Gravity": [
+        "#208eb7"
+    ],
+    "Pump/Load": [
+        "#639e6c"
+    ],
+    "MASP Pump": [
+        "#3b5e40"
+    ],
+    "Steam Sub-Critical": [
+        "#78583e"
+    ],
+    "Steam Super Critical": [
+        "#909090"
+    ],
+    "Portland Smelter": [
+        "#1c4585"
+    ],
+    "DR/VPP": [
+        "#d148d3"
+    ],
+    "PV": [
+        "#d98e01"
+    ],
+    "Wind": [
+        "#69b008"
+    ]
+}
