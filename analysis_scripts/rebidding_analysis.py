@@ -192,7 +192,7 @@ def main():
     mappings_path = Path("data", "mappings")
     output_path = Path("data", "processed")
     rebid_counts_across_july(
-        [2013],
+        list(range(2013, 2023, 2)),
         timedelta(minutes=5),
         partitioned_path,
         mappings_path,
