@@ -30,7 +30,7 @@ bid_zip_file_analysis:
 		poetry run python analysis_scripts/bid_zip_size.py
 
 ## Run rebid count analysis
-rebig_count_analysis:
+rebid_count_analysis:
 		poetry run python analysis_scripts/rebidding_analysis.py
 
 #################################################################################
