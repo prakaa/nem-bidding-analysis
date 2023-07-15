@@ -15,3 +15,4 @@ for csv in raw_csvs:
     if not partition_dir.exists():
         partition_dir.mkdir()
     chunk_file(csv, partition_dir, partition_col, chunksize=10**6)
+    csv.unlink()
