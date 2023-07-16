@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List
 
@@ -11,25 +11,34 @@ def _make_100percent_stacked_bar_chart(
 ):
     fig, ax = plt.subplots(1, 1, figsize=(8, 6))
     last_value = None
+    interval = timedelta(days=365)
     for col in percent_df:
+        year = datetime.strptime(str(col), "%Y")
         year_series = percent_df[col].sort_values(ascending=False)
         offset = 0.0
         for index, value in year_series.items():
             if last_value is not None:
                 ax.bar(
-                    int(col),
+                    year,
                     value,
                     bottom=offset,
                     label=index,
                     color=color_map[index],
+                    width=interval,
                 )
                 offset += value
             else:
-                ax.bar(int(col), value, label=index, color=color_map[index])
+                ax.bar(
+                    year,
+                    value,
+                    label=index,
+                    color=color_map[index],
+                    width=interval,
+                )
                 offset = value
             if value > 3:
                 ax.text(
-                    int(col),
+                    year,
                     (offset - value / 2),
                     f"{int(value)}%",
                     c="white",
@@ -60,7 +69,7 @@ def plot_rebid_counts_same_month_across_years(
     year_totals = by_year.sum(axis=1)
     for index, item in year_totals.items():
         ax.text(
-            index,
+            datetime.strptime(str(index), "%Y"),
             102,
             f"{int(item)}",
             horizontalalignment="center",
@@ -85,6 +94,11 @@ def plot_rebid_counts_same_month_across_years(
     ax.set_title(
         f"Share of all rebids within 5 minutes of every DI in {month_str}, 2013-2021",
         pad=25,
+    )
+    years = [y for y in range(2013, 2023, 2)]
+    ax.xaxis.set_ticks(
+        [datetime.strptime(str(y), "%Y") for y in years],
+        [str(y) for y in years],
     )
     return fig, ax
 
