@@ -1,0 +1,15 @@
+{
+    "solar_utility": "PV",
+    "wind": "Wind",
+    "coal_black": "Steam Sub-Critical",
+    "gas_ocgt": "OCGT",
+    "battery_charging": "Battery",
+    "battery_discharging": "Battery",
+    "gas_recip": "Reciprocating Engine",
+    "gas_ccgt": "CCGT",
+    "pumps": "Pump/Load",
+    "coal_brown": "Steam Sub-Critical",
+    "gas_steam": "Steam Sub-Critical",
+    "distillate": "Distillate",
+    "hydro": "Hydro"
+}
