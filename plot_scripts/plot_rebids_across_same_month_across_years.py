@@ -105,7 +105,7 @@ def plot_rebid_counts_same_month_across_years(
 
 if __name__ == "__main__":
     plt.style.use(Path("plot_scripts", "matplotlibrc.mplstyle"))
-    month_str = "July"
+    month_str = "June"
     fig, ax = plot_rebid_counts_same_month_across_years(
         Path(
             "data",
