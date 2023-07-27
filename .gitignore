@@ -1,6 +1,7 @@
-# ignore all raw and partitioned data
+# ignore all raw, partitioned and openNEM data
 data/raw/**
 data/partitioned/**
+data/opennem_stations/**
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
