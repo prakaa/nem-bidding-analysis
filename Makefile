@@ -20,6 +20,7 @@ get_raw_data:
 ## Get generators & loads, and FCAS providers tables
 get_duid_info:
 		poetry run python data_scripts/get_duid_to_tech.py -raw_path data/raw/ -proc_path data/mappings/
+		poetry run python data_scripts/opennem_facilities.py
 
 ## Partition raw_data
 partition_raw_data:
@@ -33,6 +34,10 @@ bid_zip_file_analysis:
 rebid_count_analysis:
 		poetry run python analysis_scripts/rebidding_analysis.py
 
+## Create plots
+create_plots:
+		poetry run python plot_scripts/bid_zip_size.py
+		poetry run python plot_scripts/plot_rebids_across_same_month_across_years.py
 #################################################################################
 # PROJECT RULES                                                                 #
 #################################################################################

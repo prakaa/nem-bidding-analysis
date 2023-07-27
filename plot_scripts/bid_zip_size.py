@@ -6,7 +6,7 @@ import pandas as pd
 from mms_monthly_cli.mms_monthly import get_table_names_and_sizes
 
 
-def assemble_zipfile_size_data(start_year: int, end_year: int) -> Path:
+def assemble_zipfile_size_data(start_year: int, end_year: int) -> None:
     data: Dict[str, List] = {}
     data["year"] = []
     data["month"] = []
@@ -32,7 +32,7 @@ def assemble_zipfile_size_data(start_year: int, end_year: int) -> Path:
         f"bidperoffer_monthly_zip_size_{start_year}_{end_year-1}.csv"
     )
     df.to_csv(str(out_path), index=False)
-    return out_path
+    return None
 
 
 def plot_zipfile_size_over_time(data_path: Path, start_year, end_year):
@@ -40,7 +40,7 @@ def plot_zipfile_size_over_time(data_path: Path, start_year, end_year):
     df["Date"] = pd.to_datetime(
         df["month"].astype(str) + "/" + df["year"].astype(str), format="%m/%Y"
     )
-    plt.style.use(Path("plots", "matplotlibrc.mplstyle"))
+    plt.style.use(Path("plot_scripts", "matplotlibrc.mplstyle"))
     fig, ax = plt.subplots(1, 1, figsize=(6, 4))
     df.plot(
         "Date",
@@ -65,5 +65,14 @@ def plot_zipfile_size_over_time(data_path: Path, start_year, end_year):
 
 
 if __name__ == "__main__":
-    out_path = assemble_zipfile_size_data(2012, 2023)
-    plot_zipfile_size_over_time(out_path, 2012, 2023)
+    start_year = 2012
+    end_year = 2023
+    if not (
+        out_path := Path(
+            "data",
+            "processed",
+            f"bidperoffer_monthly_zip_size_{start_year}_{end_year-1}.csv",
+        )
+    ).exists():
+        assemble_zipfile_size_data(start_year, end_year)
+    plot_zipfile_size_over_time(out_path, start_year, end_year)
