@@ -9,22 +9,25 @@ packages = [{include = "nem_bidding_analysis"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-numpy = "^1.25.1"
-pandas = "^2.0.3"
-matplotlib = "^3.7.2"
-tqdm = "^4.65.0"
-polars = {extras = ["complete"], version = "^0.18.7"}
-nemosis = "^3.4.0"
-mms-monthly-cli = "^0.2.0"
+numpy = "^1"
+pandas = "^2"
+matplotlib = "^3"
+tqdm = "^4"
+polars = {extras = ["complete"], version = "*"}
+nemosis = "^3.4"
+mms-monthly-cli = "^0.2"
+user-agent = "^0.1"
+pydantic = "*"
+simplejson = "*"
 
 [tool.poetry.group.dev.dependencies]
-ipdb = "^0.13.13"
-black = "^23.7.0"
-isort = "^5.12.0"
-ipykernel = "^6.24.0"
-mypy = "^1.4.1"
-flake8 = "^6.0.0"
-ipython = "^8.14.0"
+ipdb = "*"
+black = "^23"
+isort = "^5"
+ipykernel = "^6"
+mypy = "^1"
+flake8 = "^6"
+ipython = "^8"
 
 [tool.black]
 line-length = 79
