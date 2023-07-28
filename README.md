@@ -8,7 +8,7 @@ This repository is a companion to the pre-dispatch forecast analyses in [this re
 
 ### Bidding zip file size, 2012-2021
 
-Monthly bidding data zip file sizes have increased exponentially since the middle of 2021. See (this plot)[./plots/monthly_bidding_data_size_2012_2023.pdf].
+Monthly bidding data zip file sizes have increased exponentially since the middle of 2021. See [this plot](./plots/monthly_bidding_data_size_2012_2023.pdf).
 
 ### Share of rebids by technology type in June, 2013-2021
 
