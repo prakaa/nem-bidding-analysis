@@ -1,5 +1,5 @@
 
-.PHONY: get_raw_data
+.PHONY: get_raw_data, get_duid_info, partition_raw_data, bid_zip_file_analysis, rebid_count_analysis, create_plots, create_data_for_rebid_plots, create_data_for_bid_zip_file_plot
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -33,6 +33,12 @@ bid_zip_file_analysis:
 ## Run rebid count analysis
 rebid_count_analysis:
 		poetry run python analysis_scripts/rebidding_analysis.py
+
+## Process data for rebid plotting
+create_data_for_rebid_plots: get_raw_data get_duid_info partition_raw_data rebid_count_analysis
+
+## Process data for bid zip file plot
+create_data_for_bid_zip_file_plot: bid_zip_file_analysis
 
 ## Create plots
 create_plots:
