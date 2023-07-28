@@ -59,3 +59,7 @@ This repository contains work by Abhijith (Abi) Prakash, PhD Candidate at the UN
 The source code from this work is licensed under the terms of [GNU GPL-3.0-or-later licences](./LICENSE). It includes modified [source code](https://unsw-ceem.github.io/CEEM-Gists/opennem_facilities.html) made available by Dylan McConnell under the terms of GNU GPL-3.0-or-later.
 
 The results (generated plots) are licensed under a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
+
+## Acknowledgements
+
+- Nicholas Gorman for assistance in developing pipeline to analyse bidding data
