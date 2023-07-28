@@ -51,11 +51,16 @@ def _make_100percent_stacked_bar_chart(
 
 
 def plot_rebid_counts_same_month_across_years(
-    output_path: Path, path_to_mappings: Path, month_str: str
+    output_path: Path,
+    path_to_mappings: Path,
+    month_str: str,
+    ahead_seconds: int,
 ):
     month = datetime.strptime(month_str, "%B").month
     data: List[pd.DataFrame] = []
-    for file in output_path.glob(f"rebid_counts_{month}*.parquet"):
+    for file in output_path.glob(
+        f"rebid_counts_{month}_*_{ahead_seconds}.parquet"
+    ):
         df_month = pd.read_parquet(file)
         data.append(df_month)
     df = pd.concat(data, axis=0)
@@ -88,11 +93,15 @@ def plot_rebid_counts_same_month_across_years(
         frameon=False,
         ncol=4,
     )
+    ahead_minutes = int(ahead_seconds / 60.0)
     ax.set_ylabel(
-        f"Percentage of all rebids within 5 minutes in {month_str} (%)"
+        f"Percentage of all rebids within {ahead_minutes} minutes (%)"
     )
     ax.set_title(
-        f"Share of all rebids within 5 minutes of every DI in {month_str}, 2013-2021",
+        (
+            f"Share of rebids within {ahead_minutes} minutes of delivery "
+            + f"in {month_str}, 2013-2021"
+        ),
         pad=25,
     )
     years = [y for y in range(2013, 2023, 2)]
@@ -106,16 +115,22 @@ def plot_rebid_counts_same_month_across_years(
 if __name__ == "__main__":
     plt.style.use(Path("plot_scripts", "matplotlibrc.mplstyle"))
     month_str = "June"
-    fig, ax = plot_rebid_counts_same_month_across_years(
-        Path(
-            "data",
-            "processed",
-        ),
-        Path("data", "mappings"),
-        month_str,
-    )
-    fig.savefig(
-        Path(
-            "plots", f"rebids_{month_str.lower()}_share_by_tech_2013_2021.pdf"
+    for ahead_seconds in (5 * 60, 60 * 60):
+        fig, ax = plot_rebid_counts_same_month_across_years(
+            Path(
+                "data",
+                "processed",
+            ),
+            Path("data", "mappings"),
+            month_str,
+            ahead_seconds,
         )
-    )
+        fig.savefig(
+            Path(
+                "plots",
+                (
+                    f"rebids_{month_str.lower()}_{ahead_seconds}_"
+                    + "share_by_tech_2013_2021.pdf"
+                ),
+            )
+        )

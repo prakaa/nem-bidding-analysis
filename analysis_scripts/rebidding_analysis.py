@@ -123,8 +123,6 @@ def count_rebids_by_tech(
         "Tech",
     ]
     rebid = merged[rebid_cols].drop_duplicates()
-    if not (unk := rebid[rebid.Tech == "Unknown"]).empty:
-        print(unk)
     rebid = rebid.groupby("Tech")["DUID"].count().rename("REBIDS")
     return rebid
 
@@ -164,15 +162,15 @@ def rebid_counts_across_day(
     return counts
 
 
-def rebid_counts_across_june(
+def rebid_counts_across_month(
     years: List[int],
+    month: int,
     ahead_time: timedelta,
     partitioned_data_path: Path,
     mappings_path: Path,
     duids_path: Path,
     output_path: Path,
 ) -> None:
-    month = 6
     ahead_seconds = int(ahead_time.total_seconds())
     for year in years:
         logging.info(f"Processing {year}")
@@ -212,14 +210,18 @@ def main():
     output_path = Path("data", "processed")
     if not output_path.exists():
         output_path.mkdir()
-    rebid_counts_across_june(
-        list(range(2013, 2023, 2)),
-        timedelta(minutes=5),
-        partitioned_path,
-        mappings_path,
-        duids_path,
-        output_path,
-    )
+    # June across all years
+    month = 6
+    for ahead_minutes in (5, 60):
+        rebid_counts_across_month(
+            list(range(2013, 2023, 2)),
+            month,
+            timedelta(minutes=ahead_minutes),
+            partitioned_path,
+            mappings_path,
+            duids_path,
+            output_path,
+        )
 
 
 if __name__ == "__main__":
