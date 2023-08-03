@@ -52,9 +52,7 @@ def plot_zipfile_size_over_time(data_path: Path, start_year, end_year):
         legend=False,
     )
     ax.set_xlabel("Date")
-    ax.set_ylabel(
-        "Size of monthly bidding data (BIDPEROFFER) zip file(s) (GB)"
-    )
+    ax.set_ylabel("BIDPEROFFER zip file(s) size (GB)")
     ax.set_title("Monthly NEM Bidding Data Zipfile Size, 2012-2022")
     fig.savefig(
         Path(

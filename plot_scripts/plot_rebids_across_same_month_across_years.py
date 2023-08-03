@@ -94,13 +94,11 @@ def plot_rebid_counts_same_month_across_years(
         ncol=4,
     )
     ahead_minutes = int(ahead_seconds / 60.0)
-    ax.set_ylabel(
-        f"Percentage of all rebids within {ahead_minutes} minutes (%)"
-    )
+    ax.set_ylabel("Percentage (%)")
     ax.set_title(
         (
-            f"Share of rebids within {ahead_minutes} minutes of delivery "
-            + f"in {month_str}, 2013-2021"
+            f"Rebids by Technology Type (within {ahead_minutes} minutes of delivery "
+            + f"in {month_str}) — 2013-2021"
         ),
         pad=25,
     )

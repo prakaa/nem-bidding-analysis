@@ -4,9 +4,11 @@ from pathlib import Path
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import plotly.io as pio
 from nem_bidding_dashboard.defaults import bid_order
 from plotly.subplots import make_subplots
 
+pio.kaleido.scope.mathjax = None
 data_path = Path("data", "processed")
 
 plotly_template = dict(
