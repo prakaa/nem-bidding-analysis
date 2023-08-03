@@ -17,6 +17,10 @@ These plots look at the share of rebids within a certain time of delivery (i.e. 
 - [Within 5 minutes of dispatch](./plots/rebids_june_300_share_by_tech_2013_2021.pdf)
 - [Within 60 minutes of dispatch](./plots/rebids_june_3600_share_by_tech_2013_2021.pdf)
 
+### Examples of battery energy storage system bidding behaviour
+
+[This plot](./plots/aggregate_bess_bidding_0406_2021_2023.pdf) shows how BESS participate in a risk-averse (strictly, loss-averse) manner in the energy market.
+
 ## Usage
 
 ### Installation
