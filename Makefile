@@ -44,6 +44,7 @@ create_data_for_bid_zip_file_plot: bid_zip_file_analysis
 create_plots:
 		poetry run python plot_scripts/bid_zip_size.py
 		poetry run python plot_scripts/plot_rebids_across_same_month_across_years.py
+		poetry run python plot_scripts/plot_bess_bidding.py
 #################################################################################
 # PROJECT RULES                                                                 #
 #################################################################################
