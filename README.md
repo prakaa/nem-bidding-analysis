@@ -55,6 +55,11 @@ The scripts within this pipeline use [polars](https://www.pola.rs/) to manage me
 ```bash
 make create_data_for_rebid_plots
 ```
+## Tooling
+
+Analysis in this repository uses [NEMOSIS](https://github.com/UNSW-CEEM/NEMOSIS), [NEMSEER](https://github.com/UNSW-CEEM/NEMSEER), [mms-monthly-cli](https://github.com/prakaa/mms-monthly-cli) and [nem-bidding-dashboard](https://github.com/UNSW-CEEM/nem-bidding-dashboard).
+
+Rapid analysis of bidding data was made possible by using [polars](https://www.pola.rs/).
 
 ## Author & licenses
 
@@ -66,4 +71,4 @@ The results (generated plots) are licensed under a [Creative Commons Attribution
 
 ## Acknowledgements
 
-- Nicholas Gorman for assistance in developing pipeline to analyse bidding data
+Nicholas Gorman for assistance in developing pipeline to analyse bidding data
