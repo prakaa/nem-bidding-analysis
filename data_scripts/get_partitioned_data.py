@@ -2,7 +2,7 @@ from pathlib import Path
 
 from create_parquet_partitions_by_column import chunk_file, get_columns
 
-raw_csvs = sorted(Path.glob(Path("data", "raw"), "*.CSV"))
+raw_csvs = sorted(Path.glob(Path("data", "raw"), "*_BIDPEROFFER_*.CSV"))
 if not (output_dir := Path("data", "partitioned")).exists():
     output_dir.mkdir()
 for csv in raw_csvs:

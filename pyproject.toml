@@ -10,7 +10,7 @@ packages = [{include = "nem_bidding_analysis"}]
 [tool.poetry.dependencies]
 python = "^3.9"
 numpy = "^1"
-pandas = "*"
+pandas = "^2"
 matplotlib = "^3"
 tqdm = "^4"
 polars = {extras = ["complete"], version = "*"}
@@ -19,7 +19,7 @@ mms-monthly-cli = "^0.2"
 user-agent = "^0.1"
 pydantic = "*"
 simplejson = "*"
-nem-bidding-dashboard = {git = "https://github.com/UNSW-CEEM/nem-bidding-dashboard.git"}
+nem-bidding-dashboard = {git = "https://github.com/prakaa/nem-bidding-dashboard.git"}
 plotly = "^5"
 kaleido = "0.2.1"
 

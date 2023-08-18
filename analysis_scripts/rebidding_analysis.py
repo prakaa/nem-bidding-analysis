@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import List
 
@@ -84,9 +84,7 @@ def get_bid_data_for_periods(
     return df
 
 
-def get_all_rebids_less_than_ahead_time(
-    df: pd.DataFrame, ahead_time: timedelta
-) -> pd.DataFrame:
+def get_all_rebids_before_dispatch_interval(df: pd.DataFrame) -> pd.DataFrame:
     """
     There appears to be a large number of bids submitted after the dispatch interval
     of interest. Hence the lower bound of `> pd.Timedelta(minutes=0)`.
@@ -95,22 +93,23 @@ def get_all_rebids_less_than_ahead_time(
     (informal) gate closure.
     """
     filtered = df[df["REBIDAHEADTIME"] > pd.Timedelta(minutes=0)]
-    filtered = filtered[filtered["REBIDAHEADTIME"] <= ahead_time]
     return filtered
 
 
 def count_rebids_by_tech(
     df: pd.DataFrame,
-    ahead_time: timedelta,
     path_to_mappings: Path,
     duids_path: Path,
 ) -> pd.DataFrame:
     """
-    For a set of bids at a particular offer time, we drop duplicates for a DUID
-    to avoid treating energy and FCAS bids submitted at the same time as different bids
+    For a set of bids at a particular offer time, we only retain time, DUID
+    and technology columns and then drop duplicates to avoid treating the
+    following as unique rebids:
+    - Energy and FCAS bids submitted at the same time a
+    - For each market, the 288 quantity rebids submitted at the same time
     """
     mapping = get_gen_tech_mapping(path_to_mappings, duids_path)
-    filtered = get_all_rebids_less_than_ahead_time(df, ahead_time)
+    filtered = get_all_rebids_before_dispatch_interval(df)
     merged = pd.merge(
         filtered,
         mapping,
@@ -134,7 +133,6 @@ def rebid_counts_across_day(
     trading_year: int,
     trading_month: int,
     trading_day: int,
-    ahead_time: timedelta,
 ) -> pd.DataFrame:
     trading_date = datetime(trading_year, trading_month, trading_day)
     if trading_date < datetime(2021, 3, 1):
@@ -155,7 +153,7 @@ def rebid_counts_across_day(
         )
         period_df = df[df.PERIODID == period_id]
         period_counts = count_rebids_by_tech(
-            period_df, ahead_time, path_to_mappings, duids_path
+            period_df, path_to_mappings, duids_path
         )
         counts[trading_datetime] = period_counts
     counts = pd.DataFrame.from_dict(counts, orient="index")
@@ -165,13 +163,11 @@ def rebid_counts_across_day(
 def rebid_counts_across_month(
     years: List[int],
     month: int,
-    ahead_time: timedelta,
     partitioned_data_path: Path,
     mappings_path: Path,
     duids_path: Path,
     output_path: Path,
 ) -> None:
-    ahead_seconds = int(ahead_time.total_seconds())
     for year in years:
         logging.info(f"Processing {year}")
         month_data: List[pd.DataFrame] = []
@@ -184,7 +180,6 @@ def rebid_counts_across_month(
                     year,
                     month,
                     day,
-                    ahead_time,
                 )
             except FileNotFoundError:
                 logging.warning(
@@ -196,7 +191,7 @@ def rebid_counts_across_month(
         month_df.to_parquet(
             output_path
             / Path(
-                f"rebid_counts_{month}_{year}_{ahead_seconds}.parquet",
+                f"rebid_counts_{month}_{year}.parquet",
             )
         )
 
@@ -212,16 +207,14 @@ def main():
         output_path.mkdir()
     # June across all years
     month = 6
-    for ahead_minutes in (5, 60):
-        rebid_counts_across_month(
-            list(range(2013, 2023, 2)),
-            month,
-            timedelta(minutes=ahead_minutes),
-            partitioned_path,
-            mappings_path,
-            duids_path,
-            output_path,
-        )
+    rebid_counts_across_month(
+        list(range(2013, 2022, 1)),
+        month,
+        partitioned_path,
+        mappings_path,
+        duids_path,
+        output_path,
+    )
 
 
 if __name__ == "__main__":

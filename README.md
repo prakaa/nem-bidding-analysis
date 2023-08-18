@@ -12,10 +12,7 @@ Monthly bidding data zip file sizes have increased exponentially since the middl
 
 ### Share of rebids by technology type in June, 2013-2021
 
-These plots look at the share of rebids within a certain time of delivery (i.e. within a certain number of minutes of the delivery dispatch interval) across years by technology type:
-
-- [Within 5 minutes of dispatch](./plots/rebids_june_300_share_by_tech_2013_2021.pdf)
-- [Within 60 minutes of dispatch](./plots/rebids_june_3600_share_by_tech_2013_2021.pdf)
+[This plot](./plots/rebids_june_share_by_tech_2013_2021.pdf) look at the share of rebids across the years 2013-2021 by technology type.
 
 ### Examples of battery energy storage system bidding behaviour
 
