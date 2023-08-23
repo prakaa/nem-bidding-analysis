@@ -1,6 +1,6 @@
 # NEM (Re)Bidding Analysis, 2012-2021
 
-(Re)bidding analysis of the Australian National Electricity Market (NEM), as well as tools that help with analysing bidding data from the NEM.
+(Re)bidding analysis of the Australian National Electricity Market (NEM).
 
 This repository is a companion to the pre-dispatch forecast analyses in [this respository](https://github.com/prakaa/NEMStorageUnderUncertainty).
 
