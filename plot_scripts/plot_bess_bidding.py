@@ -72,7 +72,7 @@ for bid_band, color in zip(bid_order, divergent_colors):
             marker=dict(color=color),
             name=bid_band,
             legendgroup="price",
-            legendgrouptitle=dict(text="Bid price (AUD/MW/hr)"),
+            legendgrouptitle=dict(text="Offer price (AUD/MW/hr)"),
         ),
         row=2,
         col=1,
