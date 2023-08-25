@@ -110,7 +110,7 @@ fig.update_layout(
     barmode="stack",
     bargap=0,
     template=plotly_template,
-    title="NEM-wide Aggregate Volume of BESS Bids by Price",
+    title="NEM-wide Aggregate Volume of BESS Offers by Price",
     legend=dict(
         xanchor="right",
         x=1.6,
