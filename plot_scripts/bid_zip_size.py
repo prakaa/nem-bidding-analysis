@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 
@@ -50,11 +51,27 @@ def plot_zipfile_size_over_time(data_path: Path, start_year, end_year):
         linestyle="--",
         linewidth=0.9,
         ax=ax,
+        label="Monthly zip file size",
         legend=False,
     )
     ax.set_xlabel("Date")
-    ax.set_ylabel("BIDPEROFFER zip file(s) size (GB)")
+    ax.set_ylabel("File size (GB)")
+    ax.axvline(
+        datetime(2021, 10, 1),
+        0.0,
+        1.0,
+        ls="--",
+        lw=1.0,
+        color="black",
+        label="5MS commencement",
+    )
     ax.set_title("Monthly NEM Bid & Offer Data Zipfile Size, 2012-2022")
+    fig.legend(
+        ncol=2,
+        loc="lower center",
+        bbox_to_anchor=(0.5, -0.1),
+        frameon=False,
+    )
     fig.savefig(
         Path(
             "plots", f"monthly_bidding_data_size_{start_year}_{end_year}.pdf"
