@@ -56,6 +56,7 @@ def get_bid_data_for_periods(
     day: datetime,
     period_start: int,
     period_end: int,
+    mins_per_period: int,
 ) -> pd.DataFrame:
     """
     Day should be a datetime with day, year and month
@@ -76,7 +77,7 @@ def get_bid_data_for_periods(
     df = df.to_pandas()
     df[day_col + "TIME"] = (
         df[day_col]
-        + pd.Timedelta(minutes=5) * df.PERIODID
+        + pd.Timedelta(minutes=mins_per_period) * df.PERIODID
         + pd.Timedelta(hours=4)
     )
     offer_col = [col for col in df.columns if "OFFERDATE" in col].pop()
@@ -87,7 +88,10 @@ def get_bid_data_for_periods(
 def get_all_rebids_before_dispatch_interval(df: pd.DataFrame) -> pd.DataFrame:
     """
     There appears to be a large number of bids submitted after the dispatch interval
-    of interest. Hence the lower bound of `> pd.Timedelta(minutes=0)`.
+    of interest. This is probably because participants submit a rebid
+    with the full 48/288 periods.
+
+    Hence the lower bound of `> pd.Timedelta(minutes=0)`.
 
     This method will still capture bids that might have been submitted after
     (informal) gate closure.
@@ -105,8 +109,8 @@ def count_rebids_by_tech(
     For a set of bids at a particular offer time, we only retain time, DUID
     and technology columns and then drop duplicates to avoid treating the
     following as unique rebids:
-    - Energy and FCAS bids submitted at the same time a
-    - For each market, the 288 quantity rebids submitted at the same time
+    - Energy and FCAS bids submitted at the same time
+    - For each market, the 48/288 quantity rebids submitted at the same time
     """
     mapping = get_gen_tech_mapping(path_to_mappings, duids_path)
     filtered = get_all_rebids_before_dispatch_interval(df)
@@ -137,19 +141,24 @@ def rebid_counts_across_day(
     trading_date = datetime(trading_year, trading_month, trading_day)
     if trading_date < datetime(2021, 3, 1):
         day_col = "SETTLEMENTDATE"
+        period_end = 49
+        mins_per_period = 30
     else:
         day_col = "TRADINGDATE"
+        period_end = 289
+        mins_per_period = 5
     df = get_bid_data_for_periods(
         partitioned_data_path,
         day_col,
         trading_date,
         1,
-        288,
+        period_end,
+        mins_per_period,
     )
     counts = {}
-    for period_id in range(1, 289):
+    for period_id in range(1, period_end):
         trading_datetime = trading_date + pd.Timedelta(
-            hours=4, minutes=(5 * period_id)
+            hours=4, minutes=(mins_per_period * period_id)
         )
         period_df = df[df.PERIODID == period_id]
         period_counts = count_rebids_by_tech(
