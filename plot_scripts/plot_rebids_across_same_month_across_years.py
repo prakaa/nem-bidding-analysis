@@ -12,10 +12,11 @@ def _make_100percent_stacked_bar_chart(
     fig, ax = plt.subplots(1, 1, figsize=(8, 6))
     last_value = None
     interval = timedelta(days=365)
+    percent_df = percent_df.sort_values(2020, ascending=False)
     for col in percent_df:
         year = datetime.strptime(str(col), "%Y")
-        year_series = percent_df[col].sort_values(ascending=False)
         offset = 0.0
+        year_series = percent_df[col]
         for index, value in year_series.items():
             if last_value is not None:
                 ax.bar(

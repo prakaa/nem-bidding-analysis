@@ -42,6 +42,7 @@ def plot_zipfile_size_over_time(data_path: Path, start_year, end_year):
         df["month"].astype(str) + "/" + df["year"].astype(str), format="%m/%Y"
     )
     plt.style.use(Path("plot_scripts", "matplotlibrc.mplstyle"))
+    colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
     fig, ax = plt.subplots(1, 1, figsize=(6, 4))
     df.plot(
         "Date",
@@ -53,17 +54,27 @@ def plot_zipfile_size_over_time(data_path: Path, start_year, end_year):
         ax=ax,
         label="Monthly zip file size",
         legend=False,
+        color=colors[0],
     )
     ax.set_xlabel("Date")
     ax.set_ylabel("File size (GB)")
+    ax.axvline(
+        datetime(2021, 3, 1),
+        0.0,
+        1.0,
+        ls="--",
+        lw=1.0,
+        label="5MS-related bid format changes",
+        color=colors[1],
+    )
     ax.axvline(
         datetime(2021, 10, 1),
         0.0,
         1.0,
         ls="--",
         lw=1.0,
-        color="black",
         label="5MS commencement",
+        color=colors[2],
     )
     ax.set_title("Monthly NEM Bid & Offer Data Zipfile Size, 2012-2022")
     fig.legend(
