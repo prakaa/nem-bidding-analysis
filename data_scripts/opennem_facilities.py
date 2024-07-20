@@ -103,6 +103,7 @@ class DispatchUnit(BaseModel):
     capacity_registered: Optional[float] = None
     status: str
     data_first_seen: Optional[str] = None
+    data_last_seen: Optional[str] = None
 
 
 class Location(BaseModel):
