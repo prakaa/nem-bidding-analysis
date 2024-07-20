@@ -26,26 +26,32 @@ def get_gen_tech_mapping(
     opennem_tech_mapping = pd.read_json(
         path_to_mappings / Path("opennem_techtype_mapping.json"), typ="series"
     )
-    combined = pd.concat([gen_loads, non_gen_loads], axis=0)
-    combined = combined.replace(simple_techs)
-    combined.rename(
+    combined_gen_loads = pd.concat([gen_loads, non_gen_loads], axis=0)
+    combined_gen_loads = combined_gen_loads.replace(simple_techs)
+    combined_gen_loads.rename(
         columns={"Technology Type - Descriptor": "Tech"}, inplace=True
     )
-    keep_cols = [
-        "DUID",
-        "Tech",
-    ]
-    combined = combined[keep_cols]
-    combined.set_index("DUID", inplace=True)
+    keep_cols = ["DUID", "Tech", "Reg Cap (MW)"]
+    combined_gen_loads = combined_gen_loads[keep_cols]
+    combined_gen_loads.set_index("DUID", inplace=True)
     opennem_scheduled = opennem[opennem.capacity_registered >= 30.0].replace(
         opennem_tech_mapping
     )
     opennem_scheduled = (
-        opennem_scheduled[["code", "fueltech"]]
+        opennem_scheduled[
+            [
+                "code",
+                "fueltech",
+                "status",
+                "data_first_seen",
+                "data_last_seen",
+                "capacity_registered",
+            ]
+        ]
         .rename(columns={"code": "DUID", "fueltech": "Tech"})
         .set_index("DUID")
     )
-    combined = combined.combine_first(opennem_scheduled)
+    combined = opennem_scheduled.combine_first(combined_gen_loads)
     combined = combined.combine_first(manual).reset_index()
     return combined
 
