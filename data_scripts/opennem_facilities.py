@@ -102,6 +102,7 @@ class DispatchUnit(BaseModel):
     fueltech: str
     capacity_registered: Optional[float] = None
     status: str
+    data_first_seen: Optional[str] = None
 
 
 class Location(BaseModel):
@@ -139,9 +140,9 @@ def flatten_station(valid_station: Station):
     (probably could be done neater / cleaner with pd.normalize_json)
     """
     d = []
-    station_dict = valid_station.model_dump()
+    station_dict = valid_station.dict()
     for du in valid_station.facilities:
-        data = du.model_dump()
+        data = du.dict()
         data["lat"] = station_dict["location"]["lat"]
         data["lon"] = station_dict["location"]["lng"]
         data["station_name"] = station_dict["name"]
