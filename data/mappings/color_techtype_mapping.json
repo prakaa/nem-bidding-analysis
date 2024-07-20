@@ -23,10 +23,7 @@
     "MASP Pump": [
         "#3b5e40"
     ],
-    "Steam Sub-Critical": [
-        "#78583e"
-    ],
-    "Steam Super Critical": [
+    "Steam (Coal, Gas)": [
         "#909090"
     ],
     "Smelter": [
