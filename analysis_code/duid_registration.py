@@ -1,7 +1,9 @@
+from math import nan
 from pathlib import Path
 
 import pandas as pd
-from rebidding_analysis import get_gen_tech_mapping
+
+from .rebidding_analysis import get_gen_tech_mapping
 
 
 def get_duid_cap_tech_status_mapping(
@@ -16,9 +18,10 @@ def get_duid_cap_tech_status_mapping(
     tech_registration.data_first_seen = pd.to_datetime(
         (tech_registration.data_first_seen)
     )
-    # only retain scheduled units
+    # only retain MASP and scheduled units
     tech_registration_scheduled = tech_registration[
-        tech_registration["capacity_registered"] > 30
+        (tech_registration.Tech.isin(["MASP Pump", "DR/VPP", "Smelter", nan]))
+        | (tech_registration["capacity_registered"] > 30)
     ]
     gen_tech_reg = tech_registration_scheduled[
         [
@@ -41,7 +44,7 @@ def filter_by_date_and_tech(
 
     Includes any DUIDs that may have been retired during the month
     """
-    assert tech in gen_tech_reg.Tech.unique()
+    assert tech in gen_tech_reg.Tech.unique(), f"{tech} not in gen_tech_reg"
     if month == 12:
         next_month = "01"
         end_filter_year = year + 1
