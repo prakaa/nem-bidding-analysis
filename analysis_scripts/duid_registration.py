@@ -32,29 +32,28 @@ def get_duid_cap_tech_status_mapping(
     return gen_tech_reg
 
 
-def filter_by_year_and_tech(
-    gen_tech_reg: pd.DataFrame, year: int, tech: str
+def filter_by_date_and_tech(
+    gen_tech_reg: pd.DataFrame, year: int, month: int, tech: str
 ) -> pd.DataFrame:
     """
-    Find DUIDs of particular technology type that are operating in the given year
+    Find DUIDs of particular technology type that are operating in the given month
     based on when data was first seen and last seen for a given DUID.
 
-    Includes any DUIDs that may have been retired mid-year
+    Includes any DUIDs that may have been retired during the month
     """
     assert tech in gen_tech_reg.Tech.unique()
-    # start of the next year
-    year_filter = f"{year}-01-01"
-    next_year_filter = f"{year+1}-01-01"
+    if month == 12:
+        next_month = "01"
+        end_filter_year = year + 1
+    else:
+        next_month = str(month + 1).rjust(2, "0")
+        end_filter_year = year
+    end_filter = f"{end_filter_year}-{next_month}-01"
     filtered = gen_tech_reg[
         (gen_tech_reg.Tech == tech)
-        # ensure data first seen before the year
-        & (gen_tech_reg.data_first_seen < next_year_filter)
-        # ensure data seen after the year
-        & (gen_tech_reg.data_last_seen >= year_filter)
+        # ensure data first seen before end of month
+        & (gen_tech_reg.data_first_seen < end_filter)
+        # ensure data last seen before end of month
+        & (gen_tech_reg.data_last_seen > end_filter)
     ]
     return filtered
-
-
-gen_tech_reg = get_duid_cap_tech_status_mapping(
-    Path("data", "mappings"), Path("data", "duids")
-)
