@@ -5,10 +5,23 @@ from typing import Dict, List
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from analysis_code.duid_registration import (
+    filter_by_date_and_tech,
+    get_duid_cap_tech_status_mapping,
+)
+
 
 def _make_100percent_stacked_bar_chart(
-    percent_df: pd.DataFrame, color_map: Dict[str, str]
+    percent_df: pd.DataFrame,
+    month: int,
+    color_map: Dict[str, str],
+    path_to_mappings: Path,
+    path_to_duids: Path,
+    path_to_raw: Path,
 ):
+    duid_tech_map = get_duid_cap_tech_status_mapping(
+        path_to_mappings, path_to_duids, path_to_raw
+    )
     fig, ax = plt.subplots(1, 1, figsize=(8, 6))
     last_value = None
     interval = timedelta(days=365)
@@ -38,10 +51,22 @@ def _make_100percent_stacked_bar_chart(
                 )
                 offset = value
             if value > 3:
+                duids = filter_by_date_and_tech(
+                    duid_tech_map, year.year, month, index
+                )
+                # because batteries have a gen and load DUID
+                if index == "Battery":
+                    duid_counts = len(duids) / 2
+                # four smelters in data, but Point Henry has been closed since 2014
+                elif index == "Smelter":
+                    duid_counts = 1
+                else:
+                    duid_counts = len(duids)
+
                 ax.text(
                     year,
                     (offset - value / 2),
-                    f"{int(value)}%",
+                    f"{int(value)}% ({int(duid_counts)})",
                     c="white",
                     ha="center",
                     va="center",
@@ -54,6 +79,8 @@ def _make_100percent_stacked_bar_chart(
 def plot_rebid_counts_same_month_across_years(
     output_path: Path,
     path_to_mappings: Path,
+    path_to_duids: Path,
+    path_to_raws: Path,
     month_str: str,
 ):
     month = datetime.strptime(month_str, "%B").month
@@ -68,7 +95,14 @@ def plot_rebid_counts_same_month_across_years(
     tech_colors = pd.read_json(
         path_to_mappings / Path("color_techtype_mapping.json"), typ="series"
     )
-    fig, ax = _make_100percent_stacked_bar_chart(percent_by_year, tech_colors)
+    fig, ax = _make_100percent_stacked_bar_chart(
+        percent_by_year,
+        month,
+        tech_colors,
+        path_to_mappings,
+        path_to_duids,
+        path_to_raws,
+    )
     year_totals = by_year.sum(axis=1)
     for index, item in year_totals.items():
         ax.text(
@@ -113,6 +147,8 @@ if __name__ == "__main__":
             "processed",
         ),
         Path("data", "mappings"),
+        Path("data", "duids"),
+        Path("data", "raw"),
         month_str,
     )
     fig.savefig(
