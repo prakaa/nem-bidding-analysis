@@ -5,7 +5,7 @@ description = "Tools to analyse NEM (re)bid data and bidding analysis"
 authors = ["prakaa <abiprakash007@gmail.com>"]
 license = "GPL-3.0-or-later"
 readme = "README.md"
-packages = [{include = "nem_bidding_analysis"}]
+packages = [{include = "analysis_code"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
