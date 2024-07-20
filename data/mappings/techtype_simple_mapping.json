@@ -10,6 +10,8 @@
     "Photovoltaic Tracking  Flat Panel": "PV",
     "Photovoltaic Tracking Flat Panel": "PV",
     "Photovoltaic Tracking Flat panel": "PV",
+    "Steam Sub-Critical": "Steam (Coal, Gas)",
+    "Steam Super Critical": "Steam (Coal, Gas)",
     "Spark Ignition Reciprocating Engine": "Reciprocating Engine",
     "Compression Reciprocating Engine": "Reciprocating Engine",
     "Wind - Onshore": "Wind",
