@@ -35,13 +35,20 @@ def get_duid_cap_tech_status_mapping(
 def filter_by_year_and_tech(
     gen_tech_reg: pd.DataFrame, year: int, tech: str
 ) -> pd.DataFrame:
+    """
+    Find DUIDs of particular technology type that are operating in the given year
+    based on when data was first seen and last seen for a given DUID.
+
+    Includes any DUIDs that may have been retired mid-year
+    """
     assert tech in gen_tech_reg.Tech.unique()
     # start of the next year
-    year_filter = f"{year+1}-01-01"
+    year_filter = f"{year}-01-01"
+    next_year_filter = f"{year+1}-01-01"
     filtered = gen_tech_reg[
         (gen_tech_reg.Tech == tech)
         # ensure data first seen before the year
-        & (gen_tech_reg.data_first_seen < year_filter)
+        & (gen_tech_reg.data_first_seen < next_year_filter)
         # ensure data seen after the year
         & (gen_tech_reg.data_last_seen >= year_filter)
     ]
