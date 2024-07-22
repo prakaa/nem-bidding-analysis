@@ -22,7 +22,7 @@ def _make_100percent_stacked_bar_chart(
     duid_tech_map = get_duid_cap_tech_status_mapping(
         path_to_mappings, path_to_duids, path_to_raw
     )
-    fig, ax = plt.subplots(1, 1, figsize=(8, 6))
+    fig, ax = plt.subplots(1, 1, figsize=(10, 6))
     last_value = None
     interval = timedelta(days=365)
     percent_df = percent_df.sort_values(2020, ascending=False)
@@ -115,15 +115,14 @@ def plot_rebid_counts_same_month_across_years(
     (handles, labels) = ax.get_legend_handles_labels()
     patches = handles[0 : int(len(handles) / len(data))]
     labels = labels[0 : int(len(labels) / len(data))]
-    sorted_labels, sorted_patches = zip(*sorted(zip(labels, patches)))
     ax.legend(
-        sorted_patches,
-        sorted_labels,
-        bbox_to_anchor=(0.5, -0.25),
+        reversed(patches),
+        reversed(labels),
+        bbox_to_anchor=(1.12, 0.25),
         loc="lower center",
         borderaxespad=0,
         frameon=False,
-        ncol=4,
+        ncol=1,
     )
     ax.set_ylabel("Percentage (%)")
     ax.set_title(
