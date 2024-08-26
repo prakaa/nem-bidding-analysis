@@ -45,9 +45,6 @@ def consolidate_bid_buckets(bid_order: List[str]):
     bid_order.remove("[1000, 5000)")
     bid_order.remove("[5000, 10000)")
     bid_order.insert(6, "[1000, 10000)")
-    import ipdb
-
-    ipdb.set_trace()
     return bid_order
 
 
@@ -155,6 +152,8 @@ fig.add_trace(
     col=1,
 )
 
+fig.update_xaxes(showgrid=False)
+fig.update_yaxes(showgrid=False)
 fig.update_layout(
     height=450,
     width=700,
